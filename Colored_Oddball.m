@@ -75,10 +75,11 @@ for k = 1:length(randomTestDurations1050)
     end
     
     Screen('FillRect', window, [0.5 0.5 0.5]);
-    Screen('Flip', window);
-    [secs, keyCode, deltaSecs] = KbStrokeWait(); 
+    startTime = Screen('Flip', window);
+    [endTime, keyCode, deltaSecs] = KbStrokeWait();
+    responseTime = endTime - startTime;
     if or(isequal(KbName(keyCode),'l'), isequal(KbName(keyCode), 's'))
-        seconds = [seconds secs];
+        seconds = [seconds responseTime];
         keyPressed = [keyPressed isequal(KbName(keyCode), 'l')];
         inputForValue = [inputForValue randomTestDurations1050(k)];
     end
@@ -86,6 +87,16 @@ end
 
 Screen('FillRect', window, [1 1 1]);
 Screen('Flip', window);
+%save the input Test Duration, pressed response and response time in a file
+%named by subject name
+data = [inputForValue' keyPressed' seconds'];
+save(Name, 'data');
+
+experimentendtext = ['End of experiment'];
+Screen(window,'TextSize',20);
+Screen('FillRect',window,[1 1 1]);
+[nx, ny, bbox] = DrawFormattedText(window, experimentendtext, 'center', 'center');   
+vbl = Screen(window, 'Flip'); % IN
 
 KbStrokeWait;
 sca;
