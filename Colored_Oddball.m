@@ -14,7 +14,7 @@ B1050 = [];
 
 testDurations1050 = [0.450 0.525 0.600 0.675 0.750 0.825 0.900 0.975 1.050];                         %durations for which the oddball would appear
 testDurations1050 = [testDurations1050 testDurations1050 testDurations1050 testDurations1050 testDurations1050 testDurations1050];
-randomTestDurations1050 = [testDurations1050(randperm(length(testDurations1050))) 1.050];                   %oddball durations randomized
+randomTestDurations1050 = [testDurations1050(randperm(length(testDurations1050)))];                   %oddball durations randomized
 
 seconds = [];
 keyPressed = [];
@@ -78,11 +78,14 @@ for k = 1:length(randomTestDurations1050)
     startTime = Screen('Flip', window);
     [endTime, keyCode, deltaSecs] = KbStrokeWait();
     responseTime = endTime - startTime;
-    if or(isequal(KbName(keyCode),'l'), isequal(KbName(keyCode), 's'))
-        seconds = [seconds responseTime];
-        keyPressed = [keyPressed isequal(KbName(keyCode), 'l')];
-        inputForValue = [inputForValue randomTestDurations1050(k)];
+    while not(or(strcmp(KbName(keyCode), 's'),strcmp(KbName(keyCode), 'l')))
+        [endTime, keyCode, deltaSecs] = KbStrokeWait(); 
+        responseTime = endTime - startTime;
     end
+        
+    seconds = [seconds responseTime];
+    keyPressed = [keyPressed isequal(KbName(keyCode), 'l')];
+    inputForValue = [inputForValue randomTestDurations1050(k)];
 end
 
 Screen('FillRect', window, [1 1 1]);
