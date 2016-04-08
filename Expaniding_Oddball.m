@@ -87,11 +87,14 @@ for k = 1:length(randomTestDurations1050)
     startTime = Screen('Flip', window);
     [endTime, keyCode, deltaSecs] = KbStrokeWait(); 
     responseTime = endTime - startTime;
-    if or(isequal(KbName(keyCode),'l'), isequal(KbName(keyCode), 's'))
-        seconds = [seconds responseTime];
-        keyPressed = [keyPressed isequal(KbName(keyCode), 'l')];
-        inputForValue = [inputForValue randomTestDurations1050(k)];
+    while not(or(strcmp(KbName(keyCode), 's'),strcmp(KbName(keyCode), 'l')))
+        [endTime, keyCode, deltaSecs] = KbStrokeWait(); 
     end
+    responseTime = endTime - startTime;
+    seconds = [seconds responseTime];
+    keyPressed = [keyPressed isequal(KbName(keyCode), 'l')];
+    inputForValue = [inputForValue randomTestDurations1050(k)];
+
 end
 
 Screen('FillRect', window, [1 1 1]);
